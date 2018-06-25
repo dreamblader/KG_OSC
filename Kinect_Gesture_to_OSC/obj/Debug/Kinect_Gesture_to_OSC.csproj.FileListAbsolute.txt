@@ -1,0 +1,11 @@
+C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\bin\Debug\Kinect_Gesture_to_OSC.exe.config
+C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\bin\Debug\Kinect_Gesture_to_OSC.exe
+C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\bin\Debug\Kinect_Gesture_to_OSC.pdb
+C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\bin\Debug\Microsoft.Kinect.dll
+C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\bin\Debug\Ventuz.OSC.dll
+C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\bin\Debug\Microsoft.Kinect.xml
+C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\bin\Debug\Ventuz.OSC.xml
+C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\obj\Debug\Kinect_Gesture_to_OSC.csprojResolveAssemblyReference.cache
+C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\obj\Debug\Kinect_Gesture_to_OSC.csproj.CoreCompileInputs.cache
+C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\obj\Debug\Kinect_Gesture_to_OSC.exe
+C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\obj\Debug\Kinect_Gesture_to_OSC.pdb
