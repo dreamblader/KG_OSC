@@ -9,3 +9,8 @@ C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_
 C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\obj\Debug\Kinect_Gesture_to_OSC.csproj.CoreCompileInputs.cache
 C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\obj\Debug\Kinect_Gesture_to_OSC.exe
 C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\obj\Debug\Kinect_Gesture_to_OSC.pdb
+C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\bin\Debug\Microsoft.Kinect.VisualGestureBuilder.dll
+C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\bin\Debug\Microsoft.Kinect.VisualGestureBuilder.xml
+C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\bin\Debug\Gestures\Type 1.gbd
+C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\bin\Debug\vgbtechs\AdaBoostTech.dll
+C:\Users\Gm3\Documents\Visual Studio 2017\Projects\Kinect_Gesture_to_OSC\Kinect_Gesture_to_OSC\bin\Debug\vgbtechs\RFRProgressTech.dll
