@@ -17,15 +17,17 @@ namespace Kinect_Gesture_to_OSC
         //private readonly string type2_database = @"Gestures\Type 1_example.gbd"; << NOT ACTIVE YET
         //private readonly string type3_database = @"Gestures\Type 1_example.gbd"; << NOT ACTIVE YET
 
-        Gesture gesture_history = null;
-        int result_score = 0; //score to get enough time to trigger osc message (10 frames = 1 third of second)
-        bool result_cooldown = true; //cooldown for result score timer
+        private Gesture gesture_history = null;
+        private int result_score = 0; //score to get enough time to trigger osc message (10 frames = 1 third of second)
+        private bool result_cooldown = true; //cooldown for result score timer
 
         /// <summary> Gesture frame source which should be tied to a body tracking ID </summary>
         private VisualGestureBuilderFrameSource vgbFrameSource = null;
 
         /// <summary> Gesture frame reader which will handle gesture events coming from the sensor </summary>
         private VisualGestureBuilderFrameReader vgbFrameReader = null;
+
+        private OSC_Messages osc_message = null; // final osc message 
 
 
         public GestureDetector(KinectSensor sensor) //contructor
@@ -151,7 +153,49 @@ namespace Kinect_Gesture_to_OSC
 
         private void Gesture_List_to_OSC(Gesture user_gesture) // function to compare which gesture got triggered and create a OSC Message based on it
         {
+            switch (user_gesture.Name)
+            {
+                case "Duplo_biceps_frente":
+                    osc_message = new OSC_Messages(1);
+                    break;
 
+                case "expansao_de_dorsal":
+                    osc_message = new OSC_Messages(2);
+                    break;
+
+                case "Peitoral_melhor_lado":
+                    osc_message = new OSC_Messages(3);
+                    break;
+
+                case "triceps_melhor_lado":
+                    osc_message = new OSC_Messages(4);
+                    break;
+
+                case "Abdominal_e_Coxa":
+                    osc_message = new OSC_Messages(5);
+                    break;
+
+                case "Expansao_de_dorsal_costas":
+                    osc_message = new OSC_Messages(6);
+                    break;
+
+                case "Duplo_biceps_costas":
+                    osc_message = new OSC_Messages(7);
+                    break;
+
+                case "Mais_musculosa":
+                    osc_message = new OSC_Messages(-1);
+                    break;
+
+                default:
+                    break;
+            }
+  
+
+            if(osc_message != null)
+            {
+                osc_message.Send_OSC();
+            }
         }
     }
 }

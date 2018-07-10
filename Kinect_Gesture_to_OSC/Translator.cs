@@ -14,7 +14,7 @@ namespace Kinect_Gesture_to_OSC
         private BodyFrameReader bodyFrameReader = null; // Reader for body frames
         private CoordinateMapper coodinatemapper = null; // Coordinate mapper to map one type of point to another       
         private int body_history = -1; // Maintain last number of bodies captured - used to not print the same message again if number of bodies didn't change
-        private OSC_Messages osc_message = null; // final osc message -- will be created if a gesture is triggered.
+        //private OSC_Messages osc_message = null; // final osc message -- will be created if a gesture is triggered. ----- TRANSFERED TO GESTURE DETECTOR CLASS -----------
         private bool it_can_compare = false; // see if the conditions of comparing the body have met (1 body in screen)
 
         private GestureDetector gestureDetector = null; // Gesture Detector object to be used in the gesture detection
@@ -251,11 +251,12 @@ namespace Kinect_Gesture_to_OSC
             //END LEFT HAND
 
 
-
+            /*
             if (osc_message != null)
             {
                 //osc_message.Send_OSC(); << Call in the end if osc message exist
             }
+            */
         }
     }
 }

@@ -90,11 +90,13 @@ namespace Kinect_Gesture_to_OSC
         //Prototype: (messages, UDP_port) >>>> maybe more?
         public void Send_OSC() //sending function 
         {
+            /*
             Console.WriteLine("Connection IP: " + ip_address + "  Port:" + port_num);
             Console.WriteLine("OSC Address: " + osc_address);
             Console.WriteLine("This OBJ Variables: " + Id_track + " " + Id_fx + " " + Fx_value + " " + Velocity);
             Console.WriteLine("Number of Elements in the Package: " + osc_pack.Elements.Count);
             Console.Write("\n");
+            */
             //troubleshoot UDP SUCESS??? (is this possible?)
             udp_obj.Send(osc_pack);
         }

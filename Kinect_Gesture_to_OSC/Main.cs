@@ -34,6 +34,7 @@ namespace Kinect_Gesture_to_OSC
 
 
             //OSC CLASS TEST RUNNER//
+            /*
 
             OSC_Messages test1 = new OSC_Messages(1, 1 , 2, 3, 4);
             test1.Send_OSC(); //function call tester type 1
@@ -45,10 +46,11 @@ namespace Kinect_Gesture_to_OSC
             test3.Send_OSC(); //function call tester type 3
 
             //BAD ADRESS TEST
-            /*
+
             OSC_Messages testf = new OSC_Messages(@"/wrong_stuff", 1, 2, 3, 4);
             test3.Send_OSC(); //function call tester type 3
             */
+            
 
             Console.Read();// just a "pause" for reading printed stuff
 
