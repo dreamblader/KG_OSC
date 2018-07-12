@@ -167,6 +167,7 @@ namespace Kinect_Gesture_to_OSC
 
             //osc_message = new OSC_Messages(3, 1, 2, 3, 4); <<< Osc Prototype to remember how to use it.
             ulong trackingID = user_body.TrackingId;
+            bool hand_data_received = false;
 
 
             //VISUAL BUILDER GESTURE COMPARE
@@ -199,13 +200,15 @@ namespace Kinect_Gesture_to_OSC
 
                     if (type2_gate)
                     {
-                        type2_gate = false; // close right hand gate (type 2)
-                        Console.WriteLine("Type 2 CLOSE");
+                        type2_gate = false; // close right hand gate (type 2)  
+                        hand_data_received = true;
+                        //Console.WriteLine("Type 2 CLOSE");
                     }
                     else
                     {
                         type2_gate = true; // open right hand gate (type 2)
-                        Console.WriteLine("Type 2 OPEN");
+                        hand_data_received = true;
+                        //Console.WriteLine("Type 2 OPEN");
                     }                    
 
                 }
@@ -232,12 +235,14 @@ namespace Kinect_Gesture_to_OSC
                     if (type3_gate)
                     {
                         type3_gate = false; // close left hand gate (type 3)
-                        Console.WriteLine("Type 3 CLOSE");
+                        hand_data_received = true;
+                        //Console.WriteLine("Type 3 CLOSE");
                     }
                     else
                     {
                         type3_gate = true; // open left hand gate (type 3)
-                        Console.WriteLine("Type 3 OPEN");
+                        hand_data_received = true;
+                        //Console.WriteLine("Type 3 OPEN");
                     }
 
                 }
@@ -249,6 +254,12 @@ namespace Kinect_Gesture_to_OSC
                 left_cooldown = false; // restore cooldown
             }
             //END LEFT HAND
+
+            if (hand_data_received)
+            {
+                gestureDetector.Database_Changer(type2_gate, type3_gate);
+            }
+           
 
 
             /*

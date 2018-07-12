@@ -13,9 +13,10 @@ namespace Kinect_Gesture_to_OSC
         // Class for loading gestures and creating objects from them
 
         //private static List<Gestures> Gesture_Library = new List<Gestures>(); //gesture library (list of all created gestures)
-        private readonly string type1_database = @"Gestures\Type 1.gbd"; // Dummy Database
-        //private readonly string type2_database = @"Gestures\Type 1_example.gbd"; << NOT ACTIVE YET
-        //private readonly string type3_database = @"Gestures\Type 1_example.gbd"; << NOT ACTIVE YET
+        // VGB Databases
+        private readonly string type1_database = @"Gestures\Type 1.gbd";
+        private readonly string type2_database = @"Gestures\Type 2.gbd"; 
+        private readonly string type3_database = @"Gestures\Type 3.gbd";
 
         private Gesture gesture_history = null;
         private int result_score = 0; //score to get enough time to trigger osc message (10 frames = 1 third of second)
@@ -47,8 +48,51 @@ namespace Kinect_Gesture_to_OSC
             using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.type1_database))
             {
                 // we could load all available gestures in the database with a call to vgbFrameSource.AddGestures(database.AvailableGestures), 
-                this.vgbFrameSource.AddGestures(database.AvailableGestures);
-                
+                this.vgbFrameSource.AddGestures(database.AvailableGestures);      
+            }
+
+        }
+
+        public void Database_Changer(bool type2_gate , bool type3_gate) // Add or Remove Type 2 and 3 of the FrameSource
+        {
+            if (type2_gate)
+            {
+                using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.type2_database))
+                {
+                    // we could load all available gestures in the database with a call to vgbFrameSource.AddGestures(database.AvailableGestures), 
+                    this.vgbFrameSource.AddGestures(database.AvailableGestures);
+                }
+            }
+            else
+            {
+                using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.type2_database))
+                {
+                    foreach(Gesture gesture in database.AvailableGestures)
+                    {
+                        
+                        this.vgbFrameSource.RemoveGesture(gesture);
+                    }
+                    
+                }
+            }
+
+            if (type3_gate)
+            {
+                using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.type3_database))
+                {
+                    // we could load all available gestures in the database with a call to vgbFrameSource.AddGestures(database.AvailableGestures), 
+                    this.vgbFrameSource.AddGestures(database.AvailableGestures);
+                }
+            }
+            else
+            {
+                using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.type3_database))
+                {
+                    foreach (Gesture gesture in database.AvailableGestures)
+                    {
+                        this.vgbFrameSource.RemoveGesture(gesture);
+                    }
+                }
             }
         }
 
@@ -103,10 +147,10 @@ namespace Kinect_Gesture_to_OSC
                 {
                     // get the discrete gesture results which arrived with the latest frame
                     IReadOnlyDictionary<Gesture, DiscreteGestureResult> discreteResults = frame.DiscreteGestureResults;
+                    IReadOnlyDictionary<Gesture, ContinuousGestureResult> continuousResults = frame.ContinuousGestureResults;
 
                     if (discreteResults != null)
                     {
-                        // we only have one gesture in this source object, but you can get multiple gestures
                         foreach (Gesture gesture in this.vgbFrameSource.Gestures)
                         {
                             if (gesture.GestureType == GestureType.Discrete)
@@ -143,7 +187,27 @@ namespace Kinect_Gesture_to_OSC
                                     gesture_history = null;
                                     result_score = 0;
                                     result_cooldown = true;
+                                }                               
+                            }
+                        }
+                    }
+
+                    //-----------------------------------------------------------------------------------------------------------------------//
+
+                    if (continuousResults != null)
+                    {
+                        foreach (Gesture gesture in this.vgbFrameSource.Gestures)
+                        {
+                            if (gesture.GestureType == GestureType.Continuous)
+                            {
+                                ContinuousGestureResult result = null;
+                                continuousResults.TryGetValue(gesture, out result);
+
+                                if (result != null)
+                                {
+                                    Gesture_List_to_OSC(gesture, result.Progress);
                                 }
+
                             }
                         }
                     }
@@ -151,40 +215,51 @@ namespace Kinect_Gesture_to_OSC
             }
         }
 
-        private void Gesture_List_to_OSC(Gesture user_gesture) // function to compare which gesture got triggered and create a OSC Message based on it
+        private void Gesture_List_to_OSC(Gesture user_gesture, float continous_progress = -1) // function to compare which gesture got triggered and create a OSC Message based on it
         {
+            double converted_value = continous_progress * 127; //Value of conversion will be 0 [min] to 127 [max]. MIDI values
+            converted_value = Math.Round(converted_value);
+
             switch (user_gesture.Name)
             {
                 case "Duplo_biceps_frente":
-                    osc_message = new OSC_Messages(1);
+                    osc_message = new OSC_Messages(1,1);
                     break;
 
                 case "expansao_de_dorsal":
-                    osc_message = new OSC_Messages(2);
+                    osc_message = new OSC_Messages(1,2);
                     break;
 
                 case "Peitoral_melhor_lado":
-                    osc_message = new OSC_Messages(3);
+                    osc_message = new OSC_Messages(1,3);
                     break;
 
                 case "triceps_melhor_lado":
-                    osc_message = new OSC_Messages(4);
+                    osc_message = new OSC_Messages(1,4);
                     break;
 
                 case "Abdominal_e_Coxa":
-                    osc_message = new OSC_Messages(5);
+                    osc_message = new OSC_Messages(1,5);
                     break;
 
                 case "Expansao_de_dorsal_costas":
-                    osc_message = new OSC_Messages(6);
+                    osc_message = new OSC_Messages(1,6);
                     break;
 
                 case "Duplo_biceps_costas":
-                    osc_message = new OSC_Messages(7);
+                    osc_message = new OSC_Messages(1,7);
                     break;
 
                 case "Mais_musculosa":
-                    osc_message = new OSC_Messages(-1);
+                    osc_message = new OSC_Messages(1);
+                    break;
+
+                case "FiltroProgress":
+                    osc_message = new OSC_Messages(2, -1, -1, (float)converted_value);
+                    break;
+
+                case "volume_minProgress":
+                    osc_message = new OSC_Messages(3, -1, -1, -1, (float)converted_value);
                     break;
 
                 default:
