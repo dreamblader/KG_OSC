@@ -22,6 +22,12 @@ namespace Kinect_Gesture_to_OSC
         private int result_score = 0; //score to get enough time to trigger osc message (10 frames = 1 third of second)
         private bool result_cooldown = true; //cooldown for result score timer
 
+        private int type2_init; //position of start of all type 2 gestures inside VgbFrameSource
+        private int type3_init; //position of start of all type 3 gestures inside VgbFrameSource
+
+        private bool Type2_gate;
+        private bool Type3_gate;
+
         /// <summary> Gesture frame source which should be tied to a body tracking ID </summary>
         private VisualGestureBuilderFrameSource vgbFrameSource = null;
 
@@ -51,49 +57,31 @@ namespace Kinect_Gesture_to_OSC
                 this.vgbFrameSource.AddGestures(database.AvailableGestures);      
             }
 
+            type2_init = vgbFrameSource.Gestures.Count; // marks the beggining of the type 2
+
+            //TYPE 2 DB
+            using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.type2_database))
+            {
+                // we could load all available gestures in the database with a call to vgbFrameSource.AddGestures(database.AvailableGestures), 
+                this.vgbFrameSource.AddGestures(database.AvailableGestures);
+            }
+
+            type3_init = vgbFrameSource.Gestures.Count; // marks the beggining of the type 3
+
+            //TYPE 3 DB
+            using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.type3_database))
+            {
+                // we could load all available gestures in the database with a call to vgbFrameSource.AddGestures(database.AvailableGestures), 
+                this.vgbFrameSource.AddGestures(database.AvailableGestures);
+            }
+            //-----------------------------------------------------------------------------
+
         }
 
-        public void Database_Changer(bool type2_gate , bool type3_gate) // Add or Remove Type 2 and 3 of the FrameSource
+        public void Database_Changer(bool type2_gate , bool type3_gate) // Transfer Type 2 and Type 3 gates from Translator
         {
-            if (type2_gate)
-            {
-                using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.type2_database))
-                {
-                    // we could load all available gestures in the database with a call to vgbFrameSource.AddGestures(database.AvailableGestures), 
-                    this.vgbFrameSource.AddGestures(database.AvailableGestures);
-                }
-            }
-            else
-            {
-                using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.type2_database))
-                {
-                    foreach(Gesture gesture in database.AvailableGestures)
-                    {
-                        
-                        this.vgbFrameSource.RemoveGesture(gesture);
-                    }
-                    
-                }
-            }
-
-            if (type3_gate)
-            {
-                using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.type3_database))
-                {
-                    // we could load all available gestures in the database with a call to vgbFrameSource.AddGestures(database.AvailableGestures), 
-                    this.vgbFrameSource.AddGestures(database.AvailableGestures);
-                }
-            }
-            else
-            {
-                using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.type3_database))
-                {
-                    foreach (Gesture gesture in database.AvailableGestures)
-                    {
-                        this.vgbFrameSource.RemoveGesture(gesture);
-                    }
-                }
-            }
+            Type2_gate = type2_gate;
+            Type3_gate = type3_gate;
         }
 
         /// <summary>
@@ -140,6 +128,7 @@ namespace Kinect_Gesture_to_OSC
         private void Gesture_Reader(object sender, VisualGestureBuilderFrameArrivedEventArgs e)// search for a gesture in gesture library compatible to the frame arrived from the sensor
         {
             VisualGestureBuilderFrameReference frameReference = e.FrameReference;
+            int i = 0;
 
             using (VisualGestureBuilderFrame frame = frameReference.AcquireFrame())
             {
@@ -151,9 +140,10 @@ namespace Kinect_Gesture_to_OSC
 
                     if (discreteResults != null)
                     {
+                        i = 0;
                         foreach (Gesture gesture in this.vgbFrameSource.Gestures)
                         {
-                            if (gesture.GestureType == GestureType.Discrete)
+                            if (gesture.GestureType == GestureType.Discrete && i < type2_init)
                             {
                                 DiscreteGestureResult result = null;
                                 discreteResults.TryGetValue(gesture, out result);
@@ -189,6 +179,8 @@ namespace Kinect_Gesture_to_OSC
                                     result_cooldown = true;
                                 }                               
                             }
+
+                            i++;
                         }
                     }
 
@@ -196,19 +188,40 @@ namespace Kinect_Gesture_to_OSC
 
                     if (continuousResults != null)
                     {
+                        i = 0; // reset i counter
+                        
                         foreach (Gesture gesture in this.vgbFrameSource.Gestures)
                         {
+
+                            bool type_positive = false; // see if the type gate and requirements are met
+
                             if (gesture.GestureType == GestureType.Continuous)
                             {
-                                ContinuousGestureResult result = null;
-                                continuousResults.TryGetValue(gesture, out result);
-
-                                if (result != null)
+                                if(Type2_gate && (i >= type2_init && i < type3_init)) //if the gate is open and the gesture intervals meet the type 2 inside vgbFrameSource list
                                 {
-                                    Gesture_List_to_OSC(gesture, result.Progress);
+                                    type_positive = true;
+                                }
+                                if(Type3_gate && (i >= type3_init)) //if the gate is open and the gesture intervals meet the type 3 inside vgbFrameSource list
+                                {
+                                    type_positive = true;
                                 }
 
+
+                                if(type_positive)
+                                {
+                                    ContinuousGestureResult result = null;
+                                    continuousResults.TryGetValue(gesture, out result);
+
+                                    if (result != null)
+                                    {
+                                        Gesture_List_to_OSC(gesture, result.Progress);
+                                    }
+                                }
+                                
+
                             }
+
+                            i++;
                         }
                     }
                 }
@@ -255,7 +268,7 @@ namespace Kinect_Gesture_to_OSC
                     break;
 
                 case "FiltroProgress":
-                    osc_message = new OSC_Messages(2, -1, -1, (float)converted_value);
+                    osc_message = new OSC_Messages(2, -1, 1, (float)converted_value);
                     break;
 
                 case "volume_minProgress":

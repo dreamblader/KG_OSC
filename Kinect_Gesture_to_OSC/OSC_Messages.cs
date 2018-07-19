@@ -24,7 +24,7 @@ namespace Kinect_Gesture_to_OSC
 
         //  -- Default Package Info ---
         // Separated in 3 Types of address and constructors overloads << unused for now
-        // STRING - for the addres OSC type generated using right now: \type1, \type2 n type\3 (based on the movement type section) // INT - for ID of Track that will be played // INT - for ID of FX that will be used // FLOAT - for value that will be applied in the FX // FLOAT - for value applied in the Velocity factor of the song //
+        // INT - generate the addres string for OSC type using right now: \type1, \type2 n \type3 (based on the movement type section) // INT - for ID of Track that will be played // INT - for ID of FX that will be used // FLOAT - for value that will be applied in the FX // FLOAT - for value 8applied in the Velocity factor of the song //
         public OSC_Messages(int type, int id_track = -1, int id_fx = -1, float fx_value = -1, float velocity = -1) //constructor for Type 1 Command - Only Affect Tracks - << unused for now
         {
             Id_track = id_track;

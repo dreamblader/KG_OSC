@@ -255,11 +255,12 @@ namespace Kinect_Gesture_to_OSC
             }
             //END LEFT HAND
 
+            
             if (hand_data_received)
             {
                 gestureDetector.Database_Changer(type2_gate, type3_gate);
             }
-           
+            
 
 
             /*
