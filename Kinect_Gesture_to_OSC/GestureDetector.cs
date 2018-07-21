@@ -148,7 +148,7 @@ namespace Kinect_Gesture_to_OSC
                                 DiscreteGestureResult result = null;
                                 discreteResults.TryGetValue(gesture, out result);
 
-                                if (result.Detected && result.Confidence > 0.9) //got a discret result with a high confidence
+                                if (result.Detected && result.Confidence > 0.85) //got a discret result with a high confidence
                                 {
                                     //Console.WriteLine(result_score); //DEBUG TEST SCORE
 
@@ -230,8 +230,12 @@ namespace Kinect_Gesture_to_OSC
 
         private void Gesture_List_to_OSC(Gesture user_gesture, float continous_progress = -1) // function to compare which gesture got triggered and create a OSC Message based on it
         {
-            double converted_value = continous_progress * 127; //Value of conversion will be 0 [min] to 127 [max]. MIDI values
-            converted_value = Math.Round(converted_value);
+            double converted_value_type2 = continous_progress * 127; //Value of conversion will be 0 [min] to 127 [max]. MIDI values (for type 2 messages)
+            double converted_value_type3 = (continous_progress * 107) - 99; //Value of conversion will be -99 [min] to 8 [max]. Db values (for type 3 messages)
+            converted_value_type2 = Math.Round(converted_value_type2);
+            converted_value_type3 = Math.Round(converted_value_type3);
+
+
 
             switch (user_gesture.Name)
             {
@@ -268,11 +272,11 @@ namespace Kinect_Gesture_to_OSC
                     break;
 
                 case "FiltroProgress":
-                    osc_message = new OSC_Messages(2, -1, 1, (float)converted_value);
+                    osc_message = new OSC_Messages(2, -1, 1, (float)converted_value_type2);
                     break;
 
                 case "volume_minProgress":
-                    osc_message = new OSC_Messages(3, -1, -1, -1, (float)converted_value);
+                    osc_message = new OSC_Messages(3, -1, -1, -1, (float)converted_value_type3);
                     break;
 
                 default:
