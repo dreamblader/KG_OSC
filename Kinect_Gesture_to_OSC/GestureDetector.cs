@@ -235,14 +235,14 @@ namespace Kinect_Gesture_to_OSC
 
         private void Gesture_List_to_OSC(Gesture user_gesture, float continous_progress = -1) // function to compare which gesture got triggered and create a OSC Message based on it
         {
-            double converted_value_type2 = (continous_progress * 80) + 20; //Value of conversion will be 20 [min] to 100 [max]. MIDI values (for type 2 messages)
-            double converted_value_type3 = (continous_progress * 70) + 50; //Value of conversion will be 50 [min] to 120 [max]. Db values (for type 3 messages)
+            double converted_value_type2 = (continous_progress * 127); //Value of conversion will be 0 [min] to 127 [max]. MIDI values (for type 2 messages)
+            double converted_value_type3 = (continous_progress * 116) + 11; //Value of conversion will be 11 [min] to 127 [max]. Db values (for type 3 messages)
             converted_value_type2 = Math.Round(converted_value_type2);
             converted_value_type3 = Math.Round(converted_value_type3);
 
             if(user_gesture == null) // hand gesture - only gesture exception
             {
-                osc_message = new OSC_Messages(2, 1, 1, 0); //liga ou desliga o filtro
+                osc_message = new OSC_Messages(2, -1, 1, 0); //liga ou desliga o filtro (id_fx = 1)
             }
             else
             {
@@ -281,7 +281,7 @@ namespace Kinect_Gesture_to_OSC
                         break;
 
                     case "FiltroProgress":
-                        osc_message = new OSC_Messages(2, 0, 1, (float)converted_value_type2);
+                        osc_message = new OSC_Messages(2, -1, -1, (float)converted_value_type2); // id_fx = -1 so it can't effect the on/off switch of the filter
                         break;
 
                     case "volume_minProgress":
