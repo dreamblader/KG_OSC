@@ -240,55 +240,58 @@ namespace Kinect_Gesture_to_OSC
             converted_value_type2 = Math.Round(converted_value_type2);
             converted_value_type3 = Math.Round(converted_value_type3);
 
-
-
-            switch (user_gesture.Name)
+            if(user_gesture == null) // hand gesture - only gesture exception
             {
-                case "Duplo_biceps_frente":
-                    osc_message = new OSC_Messages(1,1);
-                    break;
-
-                case "expansao_de_dorsal":
-                    osc_message = new OSC_Messages(1,2);
-                    break;
-
-                case "Peitoral_melhor_lado":
-                    osc_message = new OSC_Messages(1,3);
-                    break;
-
-                case "triceps_melhor_lado":
-                    osc_message = new OSC_Messages(1,4);
-                    break;
-
-                case "Abdominal_e_Coxa":
-                    osc_message = new OSC_Messages(1,5);
-                    break;
-
-                case "Expansao_de_dorsal_costas":
-                    osc_message = new OSC_Messages(1,6);
-                    break;
-
-                case "Duplo_biceps_costas":
-                    osc_message = new OSC_Messages(1,7);
-                    break;
-
-                case "Mais_musculosa":
-                    osc_message = new OSC_Messages(1);
-                    break;
-
-                case "FiltroProgress":
-                    osc_message = new OSC_Messages(2, 0, 1, (float)converted_value_type2);
-                    break;
-
-                case "volume_minProgress":
-                    osc_message = new OSC_Messages(3, -1, -1, -1, (float)converted_value_type3);
-                    break;
-
-                default:
-                    osc_message = new OSC_Messages(2, 1, 1, 0); //liga ou desliga o filtro
-                    break;
+                osc_message = new OSC_Messages(2, 1, 1, 0); //liga ou desliga o filtro
             }
-  
+            else
+            {
+                switch (user_gesture.Name)
+                {
+                    case "Duplo_biceps_frente":
+                        osc_message = new OSC_Messages(1, 1);
+                        break;
+
+                    case "expansao_de_dorsal":
+                        osc_message = new OSC_Messages(1, 2);
+                        break;
+
+                    case "Peitoral_melhor_lado":
+                        osc_message = new OSC_Messages(1, 3);
+                        break;
+
+                    case "triceps_melhor_lado":
+                        osc_message = new OSC_Messages(1, 4);
+                        break;
+
+                    case "Abdominal_e_Coxa":
+                        osc_message = new OSC_Messages(1, 5);
+                        break;
+
+                    case "Expansao_de_dorsal_costas":
+                        osc_message = new OSC_Messages(1, 6);
+                        break;
+
+                    case "Duplo_biceps_costas":
+                        osc_message = new OSC_Messages(1, 7);
+                        break;
+
+                    case "Mais_musculosa":
+                        osc_message = new OSC_Messages(1);
+                        break;
+
+                    case "FiltroProgress":
+                        osc_message = new OSC_Messages(2, 0, 1, (float)converted_value_type2);
+                        break;
+
+                    case "volume_minProgress":
+                        osc_message = new OSC_Messages(3, -1, -1, -1, (float)converted_value_type3);
+                        break;
+
+                    default:
+                        break;
+                }
+            }         
 
             if(osc_message != null)
             {
