@@ -177,11 +177,16 @@ namespace Kinect_Gesture_to_OSC
                                     }
                                     
                                 }
-                                else if (result.Confidence < 0.6 && gesture == gesture_history) //if a gesture saved in the history is not anymore being tracked >>> delete it, so you can track it again
+                                else if (result.Confidence < 0.6 && gesture == gesture_history) //if a gesture saved in the history is not anymore being tracked >>> lose score. If score reach 0 the position is considered not being tracked anymore
                                 {
-                                    gesture_history = null;
-                                    result_score = 0;
-                                    result_cooldown = true;
+                                    result_score--;
+
+                                    if(result_score<=0)
+                                    {
+                                        gesture_history = null;
+                                        result_cooldown = true;
+                                        result_score = 0; //redundancy to be extra sure that the score is setted to 0
+                                    }                                    
                                 }                               
                             }
 
