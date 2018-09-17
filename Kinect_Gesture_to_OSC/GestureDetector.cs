@@ -167,6 +167,10 @@ namespace Kinect_Gesture_to_OSC
                                     else if(gesture_history == gesture)
                                     {
                                         result_score++;
+                                        if (result_score >= 15) //soft cap the score maximum to 15
+                                        {
+                                            result_score = 15;
+                                        }
                                     }
 
                                     if(result_score > 10 && result_cooldown)
